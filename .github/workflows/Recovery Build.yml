@@ -137,13 +137,14 @@ jobs:
       run: |
         bash ${GITHUB_WORKSPACE}/scripts/convert.sh ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
         repo sync -c --current-branch --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune -j24
+        df -h
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
       with:
-        swap-size-gb: 18
+        swap-size-gb: 15
 
     - name: Building recovery
       run: |
