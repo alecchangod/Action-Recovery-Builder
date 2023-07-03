@@ -70,21 +70,26 @@ jobs:
       uses: rokibhasansagar/slimhub_actions@main
       # That's it! Now use your normal steps
 
-    - name: Prepare the environment
+    - name: Prepare the environment (1/2)
       run: |
         sudo apt update
         sudo apt -y upgrade
         cd ~
         sudo apt install git aria2 -y
-        git clone https://gitlab.com/OrangeFox/misc/scripts
-        cd scripts
-        sudo bash setup/android_build_env.sh
-        sudo bash setup/install_android_sdk.sh
+        
     - name: Install OpenJDK
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
         java-version: '8'
+        
+    - name: Prepare the environment (2/2)
+      run: |
+        cd ~
+        git clone https://gitlab.com/OrangeFox/misc/scripts
+        cd scripts
+        sudo bash setup/android_build_env.sh
+        sudo bash setup/install_android_sdk.sh
 
     - name: Setup SSH Keys
       if: ${{ startsWith(github.event.inputs.MANIFEST_URL, 'git@github.com') }}
