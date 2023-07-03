@@ -112,7 +112,11 @@ jobs:
         echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
         git config --global user.name "Captain Throwback"
         git config --global user.email "captainthrowback@hotmail.com"
-        bash ~/sync/orangefox_sync.sh --branch 12.1 --path workspace
+        cd ~/sync/
+        ls -all
+        ls ~
+        ls /
+        ./orangefox_sync.sh --branch 12.1 --path ~/workspace
         id: pwd
 
     - name: Clone device tree
