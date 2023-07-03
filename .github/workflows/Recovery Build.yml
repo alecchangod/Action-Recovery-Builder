@@ -117,11 +117,13 @@ jobs:
 
     - name: Clone device tree
       run: |
+        cd workspace
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Clone common tree
       if: |
+        cd workspace
         github.event.inputs.COMMON_TREE_URL != null
         && github.event.inputs.COMMON_PATH != null
       run: |
@@ -143,11 +145,13 @@ jobs:
 
     - name: Clean-up files
       run: |
+        cd workspace
         rm -rf .repo/
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       
     - name: Building recovery
       run: |
+        cd workspace
         ls -all
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
