@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       MANIFEST_BRANCH:
-        description: 'TWRP_MANIFEST_BRANCH'
+        description: 'ofox_MANIFEST_BRANCH'
         required: true
-        default: 'twrp-12.1'
+        default: 'ofox-12.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/alecchangod/android_device_xiaomi_monet-twrp'
+        default: 'https://github.com/alecchangod/android_device_xiaomi_monet-twrp-1'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'android-12.1'
+        default: 'twrp'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
@@ -22,15 +22,15 @@ on:
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL (if no common tree, leave blank)'
         required: false
-        default: 'https://github.com/alecchangod/android_device_xiaomi_sm8250-common-twrp'
+        default: ''
       COMMON_TREE_BRANCH:
         description: 'COMMON_TREE_BRANCH'
         required: false
-        default: 'android-12.1'
+        default: ''
       COMMON_PATH:
         description: 'COMMON_PATH (if no common tree, leave blank)'
         required: false
-        default: 'device/xiaomi/sm8250-common'
+        default: ''
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
@@ -53,7 +53,6 @@ jobs:
     - name: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
-        echo "Manifest URL: https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git"
         echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
         echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
         echo "Device Tree Branch: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
@@ -133,18 +132,16 @@ jobs:
         if_true: twrp
         if_false: omni
 
-
     - name: Set Swap Space
       uses: pierotofy/set-swap-space@master
       with:
         swap-size-gb: 13
 
-    - name: Building recovery
+    - name: Clean-up files
       run: |
-        source build/envsetup.sh
-        export ALLOW_MISSING_DEPENDENCIES=true
-        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        rm -rf .repo/
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      
     - name: Building recovery
       run: |
         source build/envsetup.sh
