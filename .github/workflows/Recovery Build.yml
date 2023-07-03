@@ -117,7 +117,6 @@ jobs:
         ls ~
         ls /
         ./orangefox_sync.sh --branch 12.1 --path ~/workspace
-        id: pwd
 
     - name: Clone device tree
       run: |
