@@ -106,6 +106,7 @@ jobs:
       
     - name: Initialize repo and sync
       run: |
+        cd ~
         git clone https://gitlab.com/OrangeFox/sync.git --depth=1 ~/sync # (or, using ssh, "git clone git@gitlab.com:OrangeFox/sync.git")
         mkdir workspace
         cd workspace
@@ -113,11 +114,11 @@ jobs:
         git config --global user.name "Captain Throwback"
         git config --global user.email "captainthrowback@hotmail.com"
         cd ~/sync/
-        ./orangefox_sync.sh --branch 12.1 --path ${{ steps.pwd.outputs.workspace-folder }}
+        ./orangefox_sync.sh --branch 12.1 --path ~/workspace
 
     - name: Clone device tree
       run: |
-        cd workspace
+        cd ~/workspace
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
@@ -126,7 +127,7 @@ jobs:
         github.event.inputs.COMMON_TREE_URL != null
         && github.event.inputs.COMMON_PATH != null
       run: |
-        cd workspace
+        cd ~/workspace
         git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.COMMON_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
@@ -145,13 +146,13 @@ jobs:
 
     - name: Clean-up files
       run: |
-        cd workspace
+        cd ~/workspace
         rm -rf .repo/
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       
     - name: Building recovery
       run: |
-        cd workspace
+        cd ~/workspace
         ls -all
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
