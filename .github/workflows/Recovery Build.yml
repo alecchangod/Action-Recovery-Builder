@@ -113,10 +113,7 @@ jobs:
         git config --global user.name "Captain Throwback"
         git config --global user.email "captainthrowback@hotmail.com"
         cd ~/sync/
-        ls -all
-        ls ~
-        ls /
-        ./orangefox_sync.sh --branch 12.1 --path ~/workspace
+        ./orangefox_sync.sh --branch 12.1 --path ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Clone device tree
       run: |
@@ -151,6 +148,7 @@ jobs:
       
     - name: Building recovery
       run: |
+        ls -all
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
