@@ -10,11 +10,11 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/alecchangod/android_device_xiaomi_monet-twrp-1'
+        default: 'https://github.com/alecchangod/android_device_xiaomi_monet-twrp'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'twrp'
+        default: 'ofox'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
@@ -53,7 +53,6 @@ jobs:
     - name: Display Run Parameters
       run: |
         echo "::group::User Environment Variables"
-        echo "Manifest Branch: ${{ github.event.inputs.MANIFEST_BRANCH }}"
         echo "Device Tree URL: ${{ github.event.inputs.DEVICE_TREE_URL }}"
         echo "Device Tree Branch: ${{ github.event.inputs.DEVICE_TREE_BRANCH }}"
         echo "Device Path: ${{ github.event.inputs.DEVICE_PATH }}"
@@ -146,8 +145,8 @@ jobs:
 
     - name: Clean-up files
       run: |
-        cd ~/workspace
-        rm -rf .repo/
+        cd ~
+        rm -rf scripts
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       
     - name: Building recovery
@@ -155,8 +154,7 @@ jobs:
         cd ~/workspace
         ls -all
         source build/envsetup.sh
-        export ALLOW_MISSING_DEPENDENCIES=true
-        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        lunch twrp_monet-eng && make clean && mka adbd recoveryimage -j$(nproc --all)
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Upload to Release
